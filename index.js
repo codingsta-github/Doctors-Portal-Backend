@@ -23,18 +23,26 @@ async function run() {
     const appointmentCollection = client
       .db("doctors_portal")
       .collection("appointments");
+    const bookingCollection = client
+      .db("doctors_portal")
+      .collection("bookings");
 
     app.get("/appointment", async (req, res) => {
       const query = {};
       const cursor = appointmentCollection.find(query);
-      const results=await cursor.toArray()
-      res.send(results)
+      const results = await cursor.toArray();
+      res.send(results);
+    });
+
+    app.post("/booking", async (req, res) => {
+      const booking = req.body;
+      const result = await bookingCollection.insertOne(booking);
+      res.send(result);
     });
   } finally {
   }
 }
 run().catch(console.dir);
-
 
 app.get("/", (req, res) => {
   res.send("hello");
